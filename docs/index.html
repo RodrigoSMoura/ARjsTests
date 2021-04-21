@@ -18,7 +18,9 @@
                   }
               });
           }
-          _loadPeaks: function(longitude, latitude) {
+          
+      });
+      _loadPeaks: function(longitude, latitude) {
                 const scale = 2000;
                 console.log('acessou');
                 fetch(`https://www.hikar.org/fm/ws/bsvr.php?bbox=${longitude-0.1},${latitude-0.1},${longitude+0.1},${latitude+0.1}&outProj=4326&format=json&poi=natural`
@@ -44,7 +46,6 @@
                         });
                 });
             }
-      });
     </script>
   </head>
 
