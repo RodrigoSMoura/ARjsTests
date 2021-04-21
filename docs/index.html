@@ -25,14 +25,14 @@
                 var latitude = position.coords.latitude;
                 const scale = 100;                
                 const entity = document.createElement('a-text');
-                entity.setAttribute('look-at', '[gps-projected-camera]');
+                entity.setAttribute('look-at', '[gps-camera]');
                 entity.setAttribute('value', 'Encontrou?');
                 entity.setAttribute('scale', {
                     x: scale,
                     y: scale,
                     z: scale
                 });
-                entity.setAttribute('gps-projected-entity-place', {
+                entity.setAttribute('gps-entity-place', {
                     latitude: latitude,
                     longitude: longitude
                 });
@@ -49,8 +49,8 @@
       embedded
       arjs="sourceType: webcam; debugUIEnabled: false;"
     >     
-      <a-camera gps-camera rotation-reader> </a-camera>
       <a-entity peakfinder></a-entity>
+      <a-camera gps-camera rotation-reader> </a-camera>      
     </a-scene>
   </body>
 </html>
