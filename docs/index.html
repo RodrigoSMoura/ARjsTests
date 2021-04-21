@@ -14,10 +14,9 @@
               window.addEventListener('gps-camera-update-position', e => {
                   if(this.loaded === false) {
                      if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(_loadPeaks);
-                      }
-                      this._loadPeaks(e.detail.position.longitude, e.detail.position.latitude);
+                        navigator.geolocation.getCurrentPosition(this._loadPeaks);
                       this.loaded = true;
+                      }
                   }
               });
           },
