@@ -13,6 +13,7 @@
               this.loaded = false;
               window.addEventListener('gps-camera-update-position', e => {
                   if(this.loaded === false) {
+                      alert("encontrou");
                       this._loadPeaks(e.detail.position.longitude, e.detail.position.latitude);
                       this.loaded = true;
                   }
@@ -27,7 +28,7 @@
                 .then ( json => {
                     json.features.filter ( f => f.properties.natural == 'peak' )
                         .forEach ( peak => {
-                            console.log('peak');
+                      alert("carregou peak");
                             const entity = document.createElement('a-text');
                             entity.setAttribute('look-at', '[gps-projected-camera]');
                             entity.setAttribute('value', peak.properties.name);
