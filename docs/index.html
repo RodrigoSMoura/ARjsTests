@@ -7,7 +7,43 @@
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    
+    <script type='text/javascript'>
+      AFRAME.registerComponent('peakfinder', {
+            init: function() {
+                this.loaded = false;
+                window.addEventListener('gps-camera-update-position', e => {
+                    if(this.loaded === false) {
+                        this._loadPeaks(e.detail.position.longitude, e.detail.position.latitude);
+                        this.loaded = true;
+                    }
+                });
+            }
+            _loadPeaks: function(longitude, latitude) {
+                  const scale = 2000;
+                  fetch(`https://www.hikar.org/fm/ws/bsvr.php?bbox=${longitude-0.1},${latitude-0.1},${longitude+0.1},${latitude+0.1}&outProj=4326&format=json&poi=natural`
+                      )
+                  .then ( response => response.json() )
+                  .then ( json => {
+                      json.features.filter ( f => f.properties.natural == 'peak' )
+                          .forEach ( peak => {
+                              const entity = document.createElement('a-text');
+                              entity.setAttribute('look-at', '[gps-projected-camera]');
+                              entity.setAttribute('value', peak.properties.name);
+                              entity.setAttribute('scale', {
+                                  x: scale,
+                                  y: scale,
+                                  z: scale
+                              });
+                              entity.setAttribute('gps-projected-entity-place', {
+                                  latitude: peak.geometry.coordinates[1],
+                                  longitude: peak.geometry.coordinates[0]
+                              });
+                              this.el.appendChild(entity);
+                          });
+                  });
+              }
+        });
+    </script>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
@@ -16,13 +52,7 @@
       embedded
       arjs="sourceType: webcam; debugUIEnabled: false;"
     >
-      <a-text
-        value="Encontrou?"
-        look-at="[gps-camera]"
-        scale="100 100 100"
-        gps-entity-place="latitude: -11.011317; longitude: -37.091231;"
-      ></a-text>
-      <a-box gps-projected-entity-place='latitude: -11.011317; longitude: -37.091231' material='color: red' scale='10 10 10'></a-box>
+      <a-entity peakfinder></a-entity>
       <a-camera gps-camera rotation-reader> </a-camera>
     </a-scene>
   </body>
